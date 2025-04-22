@@ -20,11 +20,11 @@ jobs:
       - name: Generate Docker image
         run: mvn spring-boot:build-image \
           -DskipTests \
-          -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/posts:latest
+          -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/posts:${{ steps.project.outputs.tag }}
       - name: Login to DockerHub
         run: docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
       - name: Push image to DockerHub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/posts:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/posts:${{ steps.project.outputs.tag }}
   deploy:
     runs-on: ubuntu-latest
     needs: build
